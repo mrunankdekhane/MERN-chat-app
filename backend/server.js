@@ -13,7 +13,15 @@ const path = require("path");
 dotenv.config();
 connectDB();
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin:
+      process.env.NODE_ENV === "production"
+        ? "https://talk-a-tive-ydgl.onrender.com"
+        : "http://localhost:3000",
+    credentials: true,
+  }),
+);
 
 app.use(express.json()); // to accept json data
 
@@ -55,7 +63,10 @@ const server = app.listen(
 const io = require("socket.io")(server, {
   pingTimeout: 60000,
   cors: {
-    origin: "http://localhost:3000",
+    origin:
+      process.env.NODE_ENV === "production"
+        ? "https://talk-a-tive-ydgl.onrender.com"
+        : "http://localhost:3000",
     credentials: true,
   },
 });
